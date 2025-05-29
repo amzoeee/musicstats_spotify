@@ -23,8 +23,8 @@ for jsonpath in jsons:
                              "master_metadata_album_artist_name", 
                              "master_metadata_track_name", 
                              "spotify_track_uri", 
-                             "username"]])
-# username is a temporary column thingy used to count the amt of times the track was played
+                             "ts"]])
+# ts is a temporary column thingy used to count the amt of times the track was played
 
 totaldata = pd.concat(cleaneddata) 
 
@@ -35,12 +35,12 @@ totaldata.rename(columns={"master_metadata_album_artist_name" : "artist_name", "
 aggregation_functions = {'ms_played': 'sum', 
                          'artist_name' : 'first', 
                          'track_name' : 'first',
-                         'username' : 'size' # username used to count the amt of times each track was played
+                         'ts' : 'size' # ts used to count the amt of times each track was played
                          }
 
 totaldata = totaldata.groupby(totaldata['spotify_track_uri']).agg(aggregation_functions)
 
-totaldata.rename(columns={"username" : "times_played"}, inplace=True)
+totaldata.rename(columns={"ts" : "times_played"}, inplace=True)
 
 totaldata = totaldata.sort_values("ms_played", ascending=False)
 
