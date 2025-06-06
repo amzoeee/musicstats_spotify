@@ -11,32 +11,32 @@ artists_uniquetracks = artists_playtime.sort_values("unique_tracks", ascending=F
 
 
 file = open("formatteddata/tracks_playtime.txt", "w")
-file.write("zoe's track stats :D (sorted by playtime)\n")
+file.write("track stats :D (sorted by playtime)\n")
 for index, s in tracks_playtime.iterrows():
     file.write(str(s.get("track_name")) + " - " + str(s.get("artist_name")) + ": " + convert_ms(s.get("ms_played")) + " \n")
 file.close()
 
 file = open("formatteddata/tracks_playcount.txt", "w")
-file.write("zoe's track stats :D (sorted by playcount)\n")
+file.write("track stats :D (sorted by playcount)\n")
 for index, s in tracks_playcount.iterrows():
     file.write(str(s.get("track_name")) + " - " + str(s.get("artist_name")) + ": " + str(s.get("times_played")) + " plays \n")
 file.close()
 
 
 file = open("formatteddata/artists_playtime.txt", "w")
-file.write("zoe's artist stats :D (sorted by playtime)\n")
+file.write("artist stats :D (sorted by playtime)\n")
 for index, s in artists_playtime.iterrows():
     file.write(str(s.get("artist_name"))+ ": " + convert_ms(s.get("ms_played")) + " \n")
 file.close()
 
 file = open("formatteddata/artists_playcount.txt", "w")
-file.write("zoe's artist stats :D (sorted by playcount)\n")
+file.write("artist stats :D (sorted by playcount)\n")
 for index, s in artists_playcount.iterrows():
     file.write(str(s.get("artist_name")) + ": " + str(s.get("times_played")) + " plays \n")
 file.close()
 
 file = open("formatteddata/artists_uniquetracks.txt", "w")
-file.write("zoe's artist stats :D (sorted by playcount)\n")
+file.write("artist stats :D (sorted by playcount)\n")
 for index, s in artists_uniquetracks.iterrows():
     file.write(str(s.get("artist_name")) + ": " + str(s.get("unique_tracks")) + " tracks \n")
 file.close()
