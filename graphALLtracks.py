@@ -31,6 +31,8 @@ for filename in os.listdir(directory):
 cleaneddata = [] # list of all plays of songs
 
 for jsonpath in jsons:
+    if jsonpath.split(".")[-1] != "json":
+        continue
     data = pd.read_json(jsonpath)
     cleaneddata.append(data[["master_metadata_album_artist_name", 
                              "master_metadata_track_name", 
