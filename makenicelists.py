@@ -1,7 +1,7 @@
 import pandas as pd
 
 def convert_ms(ms): # function to convert ms to hr, min, and sec 
-    return str((ms//1000)//3600) + " hr, " + str((ms//1000)//60%60) + " min, " + str((ms//1000)%60) + " sec" 
+    return str((ms//1000)//3600) + " hr, " + str(((ms//1000)//60)%60) + " min, " + str((ms//1000)%60) + " sec" 
 
 tracks_playtime = pd.read_csv("data/tracks.csv")
 tracks_playcount = tracks_playtime.sort_values("times_played", ascending=False)
