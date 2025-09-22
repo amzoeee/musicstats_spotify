@@ -3,3 +3,5 @@ formatteddata/
 rawdata/
 
 .DS_Store
+
+__pycache__/

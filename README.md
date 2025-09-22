@@ -10,6 +10,8 @@
 
 
 # programs 
+runme.py: runs sortbytrack.py, sortbyartist.py, and makenicelists.py
+
 sortbytrack.py: makes tracks.csv based off of raw data; includes playcount, playtime
 
 sortbyartist.py: makes artists.csv based off of tracks.csv; includes playcount, playtime, and unique tracks
