@@ -37,3 +37,8 @@ makenicelists.py: self explanatory. (reads from tracks.csv, artists.csv)
 totaltimeplayed.py: self explanatory (reads from tracks.csv)
 
 graphALLtracks.py: scatterfm style graphing. hella slow :>
+
+graphtopn_playcount.py: bar graphs of your top n artists and tracks by playcount!!
+
+graphtopn_playtime.py: bar graphs of your top n artists and tracks by playtime!!
+
