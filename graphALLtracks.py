@@ -152,15 +152,3 @@ if labels:
 
 
 plt.show()
-
-# old testing stuff below ignroe idk 
-
-# ts = "2023-11-16T23:56:30Z"
-
-# utc_time = datetime.fromisoformat(ts[:-1])
-# print("utc: " + str(utc_time))
-
-# unix_time = utc_time.strftime('%s')
-
-# y = (utc_time - 3600*8)%86400
-# x = (utc_time - 3600*8)//86400
