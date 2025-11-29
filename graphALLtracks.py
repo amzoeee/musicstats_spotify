@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from dateutil import tz
@@ -37,32 +38,34 @@ for jsonpath in jsons:
     cleaneddata.append(data[["master_metadata_album_artist_name", 
                              "master_metadata_track_name", 
                              "ts"]])
-totaldata = pd.concat(cleaneddata) 
+totaldata = pd.concat(cleaneddata)
 
+# Filter out None values upfront
+totaldata = totaldata.dropna(subset=['master_metadata_track_name', 'master_metadata_album_artist_name'])
 
-x = []
-y = []
-c = []
-l = []
+# Vectorized conversion to unix time
+totaldata['unix_time'] = pd.to_datetime(totaldata['ts']).astype(np.int64) // 10**9
 
-for n, row in totaldata.iterrows():
-    ts = row['ts']
-    track = row['master_metadata_track_name']
-    artist = row['master_metadata_album_artist_name']
+# Vectorized x, y calculations
+x = (totaldata['unix_time'] + 3600*timezone_offset) // 86400
+y = 86400 - (totaldata['unix_time'] + 3600*timezone_offset) % 86400
+
+# Create labels with timezone correction
+unix_naive_cur_timezone = totaldata['unix_time'] + 3600*timezone_offset
+timezone_correct = pd.to_datetime(unix_naive_cur_timezone, unit='s')
+l = (totaldata['master_metadata_album_artist_name'] + " - " + 
+     totaldata['master_metadata_track_name'] + "\n" + 
+     timezone_correct.astype(str)).tolist()
+
+# Vectorized color generation
+if colors:
+    def get_color(artist):
+        h = hash(artist)
+        return (h%1000 / 1000, (h//1000)%1000 / 1000, (h//1000000)%1000 / 1000)
     
-    if not track is None and not artist is None:
-        utc_time = datetime.fromisoformat(ts[:-1])
-        unix_time = int(utc_time.strftime('%s')) # in utc
-        unix_naive_cur_timezone = unix_time + 3600*timezone_offset # in current timezone
-        x.append((unix_time - 3600*timezone_offset)//86400)
-        y.append(86400-(unix_time - 3600*timezone_offset)%86400)
-
-        timezone_correct = datetime.fromtimestamp(unix_naive_cur_timezone)
-        l.append(artist + " - " + track + "\n" + str(timezone_correct)) # fix later convert to local timezone
-        
-        if colors:
-            h = hash(artist) # really stupid color generator thing
-            c.append((h%1000 / 1000, (h//1000)%1000 / 1000, (h//1000000)%1000 / 1000))
+    c = [get_color(artist) for artist in totaldata['master_metadata_album_artist_name']]
+else:
+    c = []
 
 
 fig, ax = plt.subplots(figsize=(15, 7))
