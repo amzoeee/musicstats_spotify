@@ -67,6 +67,11 @@ if colors:
 else:
     c = []
 
+# Convert to numpy arrays for faster access
+x_array = x.values
+y_array = y.values
+l_array = np.array(l)
+
 
 fig, ax = plt.subplots(figsize=(15, 7))
 
@@ -74,6 +79,9 @@ if colors:
     sc = ax.scatter(x, y, s=dot_size, c=c)
 else:
     sc = ax.scatter(x, y, s=dot_size)
+
+# Cache offsets for faster hover
+offsets = sc.get_offsets()
 
 # y axis ticks: time of day (in 4 hr)
 hours_in_seconds = [i * 4 * 3600 for i in range(6)] 
@@ -120,20 +128,17 @@ if labels:
 
 def update_annot(ind):
     n = ind["ind"][0]
-
-    pos = sc.get_offsets()[ind["ind"][0]]
+    pos = offsets[n]
     annot.xy = pos
-    text = l[n]
-    annot.set_text(text)
+    annot.set_text(l_array[n])
     annot.get_bbox_patch().set_alpha(0.4)
 
 
 def hover(event):
-
     vis = annot.get_visible()
     if event.inaxes == ax:
         cont, ind = sc.contains(event)
-        if cont:
+        if cont and len(ind["ind"]) > 0:
             update_annot(ind)
             annot.set_visible(True)
             fig.canvas.draw_idle()
