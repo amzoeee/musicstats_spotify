@@ -55,7 +55,7 @@ unix_naive_cur_timezone = totaldata['unix_time'] + 3600*timezone_offset
 timezone_correct = pd.to_datetime(unix_naive_cur_timezone, unit='s')
 l = (totaldata['master_metadata_album_artist_name'] + " - " + 
      totaldata['master_metadata_track_name'] + "\n" + 
-     timezone_correct.astype(str)).tolist()
+     timezone_correct.dt.strftime("%m/%d/%Y | %I:%M %p")).tolist()
 
 # Vectorized color generation
 if colors:
