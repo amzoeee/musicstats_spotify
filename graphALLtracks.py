@@ -64,12 +64,49 @@ for n, row in totaldata.iterrows():
             h = hash(artist) # really stupid color generator thing
             c.append((h%1000 / 1000, (h//1000)%1000 / 1000, (h//1000000)%1000 / 1000))
 
+
 fig, ax = plt.subplots(figsize=(15, 7))
 
 if colors: 
     sc = ax.scatter(x, y, s=dot_size, c=c)
 else:
     sc = ax.scatter(x, y, s=dot_size)
+
+# y axis ticks: time of day (in 4 hr)
+hours_in_seconds = [i * 4 * 3600 for i in range(6)] 
+hour_labels = [datetime.fromtimestamp(h - 3600*timezone_offset).strftime("%I:%M %p") for h in hours_in_seconds]
+ax.set_yticks([(86400 - h) for h in hours_in_seconds])
+ax.set_yticklabels(hour_labels)
+
+
+# x axis ticks: date (in 6 month increments)
+min_day = min(x)
+max_day = max(x)
+    
+min_date = datetime.fromtimestamp((min_day * 86400) - 3600*timezone_offset)
+max_date = datetime.fromtimestamp((max_day * 86400) - 3600*timezone_offset)
+    
+date_ticks = []
+date_labels = []
+current = min_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+if current.month < 7:
+    current = current.replace(month=1)
+else:
+    current = current.replace(month=7)
+    
+while current <= max_date:
+    day_num = int((current.timestamp() + 3600*timezone_offset) // 86400)
+    date_ticks.append(day_num)
+    date_labels.append(current.strftime("%b %Y"))
+        
+    if current.month == 1:
+        current = current.replace(month=7)
+    else:
+        current = current.replace(year=current.year + 1, month=1)
+    
+ax.set_xticks(date_ticks)
+ax.set_xticklabels(date_labels)
 
 if labels: 
 
