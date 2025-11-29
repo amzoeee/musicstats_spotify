@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from dateutil import tz
+from colorsys import hsv_to_rgb
 import os # for file name sutff
 
 
@@ -61,7 +62,10 @@ l = (totaldata['master_metadata_album_artist_name'] + " - " +
 if colors:
     def get_color(artist):
         h = hash(artist)
-        return (h%1000 / 1000, (h//1000)%1000 / 1000, (h//1000000)%1000 / 1000)
+        hue = (h % 360) / 360.0  # 0-1 hue range for better color spread
+        saturation = 0.6 + ((h // 360) % 40) / 100.0  # vary saturation slightly
+        value = 0.8 + ((h // 36000) % 20) / 100.0  # vary brightness slightly
+        return hsv_to_rgb(hue, saturation, value)
     
     c = [get_color(artist) for artist in totaldata['master_metadata_album_artist_name']]
 else:
