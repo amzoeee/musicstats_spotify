@@ -5,6 +5,7 @@ from datetime import datetime
 from dateutil import tz
 from colorsys import hsv_to_rgb
 import os # for file name sutff
+import hashlib
 
 
 timezone_offset = -8 # in hours, from utc (ie what do u add to utc to get the timezone)
@@ -61,7 +62,7 @@ l = (totaldata['master_metadata_album_artist_name'] + " - " +
 # Vectorized color generation
 if colors:
     def get_color(artist):
-        h = hash(artist)
+        h = int(hashlib.md5(artist.encode()).hexdigest(), 16)
         hue = (h % 360) / 360.0  # 0-1 hue range for better color spread
         saturation = 0.6 + ((h // 360) % 40) / 100.0  # vary saturation slightly
         value = 0.8 + ((h // 36000) % 20) / 100.0  # vary brightness slightly

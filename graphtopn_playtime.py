@@ -3,12 +3,13 @@ import matplotlib.pyplot as plt
 import os
 from colorsys import hsv_to_rgb
 import textwrap
+import hashlib
 
 plt.rcParams['font.family'] = ['Heiti TC']
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""
-    h = hash(artist)
+    h = int(hashlib.md5(artist.encode()).hexdigest(), 16)
     hue = (h % 360) / 360.0
     saturation = 0.6 + ((h // 360) % 40) / 100.0
     value = 0.8 + ((h // 36000) % 20) / 100.0

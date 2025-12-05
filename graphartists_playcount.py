@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import hashlib
+from colorsys import hsv_to_rgb
 
 n = 10
 labels = True # whether or not the labels are shown w track name
@@ -14,6 +16,14 @@ totaldata = totaldata.sort_values("times_played", ascending=False)
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
+
+def get_color(artist):
+    """Generate consistent color for artist based on hash"""
+    h = int(hashlib.md5(artist.encode()).hexdigest(), 16)
+    hue = (h % 360) / 360.0
+    saturation = 0.6 + ((h // 360) % 40) / 100.0
+    value = 0.8 + ((h // 36000) % 20) / 100.0
+    return hsv_to_rgb(hue, saturation, value)
 
 x = np.arange(0, n)
 y = partial['times_played'].tolist()
