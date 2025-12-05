@@ -4,7 +4,7 @@ import numpy as np
 import hashlib
 from colorsys import hsv_to_rgb
 
-n = 10
+n = 25
 labels = True
 
 def convert_ms(ms): # function to convert ms to hr, min, and sec 
@@ -17,6 +17,7 @@ totaldata = pd.read_csv("data/artists.csv")
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
+ax.set_title(f'Top {str(n)} Artists by Playtime')
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""

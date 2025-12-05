@@ -4,7 +4,7 @@ import numpy as np
 import hashlib
 from colorsys import hsv_to_rgb
 
-n = 10
+n = 25
 labels = True # whether or not the labels are shown w track name
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
@@ -16,6 +16,9 @@ totaldata = totaldata.sort_values("unique_tracks", ascending=False)
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
+
+ax.set_title(f'Top {str(n)} Artists by Unique Tracks')
+
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""

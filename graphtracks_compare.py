@@ -17,6 +17,8 @@ totaldata = pd.read_csv("data/tracks.csv")
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
+ax.set_title('Track Playcount v. Playtime')
+
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""
@@ -33,7 +35,7 @@ track_names = partial['track_name'].tolist()
 artist_names = partial['artist_name'].tolist()
 colors = [get_color(artist) for artist in artist_names]
 
-ax.set_xlabel('playtime (in hrs)')
+ax.set_xlabel('Playtime (in hrs)')
 # 10 nicely spaced x-ticks with appropriate magnitude
 x_min, x_max = min(x), max(x)
 x_range = x_max - x_min
@@ -43,7 +45,7 @@ x_min_rounded = np.floor(x_min / magnitude) * magnitude
 x_max_rounded = np.ceil(x_max / magnitude) * magnitude
 xticks = np.arange(x_min_rounded, x_max_rounded + x_step, x_step)
 ax.set_xticks(ticks=xticks)
-ax.set_ylabel('playcount')
+ax.set_ylabel('Playcount')
 # 10 nicely spaced y-ticks with appropriate magnitude
 y_min, y_max = min(y), max(y)
 y_range = y_max - y_min

@@ -4,7 +4,7 @@ import numpy as np
 import hashlib
 from colorsys import hsv_to_rgb
 
-n = 10
+n = 25
 labels = True # whether or not the labels are shown w track name
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
@@ -16,6 +16,7 @@ totaldata = totaldata.sort_values("times_played", ascending=False)
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
+ax.set_title(f'Top {str(n)} Artists by Playcount')
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""
@@ -33,7 +34,7 @@ colors = [get_color(artist) for artist in artist_names]
 
 sc = ax.scatter(x, y, c=colors)
 
-ax.set_ylabel('playcount')
+ax.set_ylabel('Artist Playcount')
 # 10 nicely spaced y-ticks with appropriate magnitude
 y_min, y_max = min(y), max(y)
 y_range = y_max - y_min

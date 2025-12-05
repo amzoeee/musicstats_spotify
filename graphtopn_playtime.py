@@ -52,17 +52,17 @@ fig_stats, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 # Top artists bar chart
 artist_colors = [get_color(artist) for artist in top_artists.index]
 top_artists.plot(kind='barh', ax=ax1, color=artist_colors)
-ax1.set_xlabel('total playtime (hours)')
+ax1.set_xlabel('Total Playtime (hours)')
 ax1.set_ylabel('')
-ax1.set_title(f'top {top_n} artists by playtime')
+ax1.set_title(f'Top {top_n} Artists by Playtime')
 ax1.invert_yaxis()
 
 # Top tracks bar chart
 track_colors = [get_color(track.split(" - ")[0]) for track in top_tracks_grouped.index]
 top_tracks_grouped.plot(kind='barh', ax=ax2, color=track_colors)
-ax2.set_xlabel('total playtime (hours)')
+ax2.set_xlabel('Total Playtime (hours)')
 ax2.set_ylabel('')
-ax2.set_title(f'top {top_n} tracks by playtime')
+ax2.set_title(f'Top {top_n} Tracks by Playtime')
 ax2.invert_yaxis()
 
 # Wrap long track names

@@ -79,6 +79,7 @@ l_array = np.array(l)
 
 
 fig, ax = plt.subplots(figsize=(15, 7))
+ax.set_title('All-time Spotify Listening History')
 
 if colors: 
     sc = ax.scatter(x, y, s=dot_size, c=c)
