@@ -30,15 +30,30 @@ def get_color(artist):
 x = partial['unique_tracks'].tolist()
 y = partial['times_played'].tolist()
 artist_names = partial['artist_name'].tolist()
+colors = [get_color(artist) for artist in artist_names]
 
 ax.set_xlabel('unique tracks')
-xticks = np.arange((min(x))//10*10, (max(x)) + 1, 10)
-ax.set_xticks(ticks=[t for t in xticks], labels=xticks) # scuffed labels
+# 10 nicely spaced x-ticks with appropriate magnitude
+x_min, x_max = min(x), max(x)
+x_range = x_max - x_min
+magnitude = 10 ** np.floor(np.log10(x_range / 10))
+x_step = np.ceil(x_range / 10 / magnitude) * magnitude
+x_min_rounded = np.floor(x_min / magnitude) * magnitude
+x_max_rounded = np.ceil(x_max / magnitude) * magnitude
+xticks = np.arange(x_min_rounded, x_max_rounded + x_step, x_step)
+ax.set_xticks(ticks=xticks)
 ax.set_ylabel('playcount')
-yticks = np.arange((min(y))//500*500, (max(y)) + 20, 500)
-ax.set_yticks(ticks=[t for t in yticks], labels=yticks) # scuffed labels
+# 10 nicely spaced y-ticks with appropriate magnitude
+y_min, y_max = min(y), max(y)
+y_range = y_max - y_min
+magnitude = 10 ** np.floor(np.log10(y_range / 10))
+y_step = np.ceil(y_range / 10 / magnitude) * magnitude
+y_min_rounded = np.floor(y_min / magnitude) * magnitude
+y_max_rounded = np.ceil(y_max / magnitude) * magnitude
+yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
+ax.set_yticks(ticks=yticks)
 
-sc = ax.scatter(x, y)
+sc = ax.scatter(x, y, c=colors)
 
 if labels:
     annot = ax.annotate("", xy=(0,0), xytext=(10,10),textcoords="offset points",

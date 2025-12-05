@@ -27,14 +27,24 @@ def get_color(artist):
     return hsv_to_rgb(hue, saturation, value)
 
 x = np.arange(0, n)
-y = partial['ms_played'].tolist()
+y_ms = partial['ms_played'].tolist()
+y = [ms / (1000 * 60 * 60) for ms in y_ms]
 names = [artist['artist_name'] + "\n" + convert_ms(artist['ms_played']) for n, artist in partial.iterrows()]
+artist_names = partial['artist_name'].tolist()
+colors = [get_color(artist) for artist in artist_names]
 
-sc = ax.scatter(x, y)
+sc = ax.scatter(x, y, c=colors)
 
 ax.set_ylabel('playtime in hours')
-yticks = np.arange((min(y)//3600000)//25*25, (max(y)//3600000) + 10, 25)
-ax.set_yticks(ticks=[t*3600000 for t in yticks], labels=yticks) # scuffed labels
+# 10 nicely spaced y-ticks with appropriate magnitude
+y_min, y_max = min(y), max(y)
+y_range = y_max - y_min
+magnitude = 10 ** np.floor(np.log10(y_range / 10))
+y_step = np.ceil(y_range / 10 / magnitude) * magnitude
+y_min_rounded = np.floor(y_min / magnitude) * magnitude
+y_max_rounded = np.ceil(y_max / magnitude) * magnitude
+yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
+ax.set_yticks(ticks=yticks)
 ax.set_xticks(ticks=[])
 
 if labels: 

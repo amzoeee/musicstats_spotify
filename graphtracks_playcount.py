@@ -28,13 +28,21 @@ def get_color(artist):
 x = np.arange(0, n)
 y = partial['times_played'].tolist()
 names = [track['artist_name'] + " - " + track['track_name'] + '\nplayed ' + str(track['times_played']) + ' times' for n, track in partial.iterrows()]
+artist_names = partial['artist_name'].tolist()
+colors = [get_color(artist) for artist in artist_names]
 
-
-sc = ax.scatter(x, y)
+sc = ax.scatter(x, y, c=colors)
 
 ax.set_ylabel('playcount')
-yticks = np.arange((min(y))//100*100, (max(y)) + 1, 100)
-ax.set_yticks(ticks=[t for t in yticks], labels=yticks) # scuffed labels
+# 10 nicely spaced y-ticks with appropriate magnitude
+y_min, y_max = min(y), max(y)
+y_range = y_max - y_min
+magnitude = 10 ** np.floor(np.log10(y_range / 10))
+y_step = np.ceil(y_range / 10 / magnitude) * magnitude
+y_min_rounded = np.floor(y_min / magnitude) * magnitude
+y_max_rounded = np.ceil(y_max / magnitude) * magnitude
+yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
+ax.set_yticks(ticks=yticks)
 ax.set_xticks(ticks=[])
 
 
