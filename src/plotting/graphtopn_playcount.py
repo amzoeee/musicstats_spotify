@@ -17,7 +17,7 @@ def get_color(artist):
 
 # Load data
 jsons = []
-directory = 'rawdata'
+directory = 'data'
 
 for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
@@ -31,38 +31,35 @@ for jsonpath in jsons:
         continue
     data = pd.read_json(jsonpath)
     cleaneddata.append(data[["master_metadata_album_artist_name", 
-                             "master_metadata_track_name",
-                             "ms_played"]])
+                             "master_metadata_track_name"]])
 totaldata = pd.concat(cleaneddata)
 
 # Filter out None values
 totaldata = totaldata.dropna(subset=['master_metadata_track_name', 'master_metadata_album_artist_name'])
 
-# Top stats by playtime
+# Top stats
 top_n = 15
 
-top_artists = totaldata.groupby('master_metadata_album_artist_name')['ms_played'].sum() / (1000 * 60 * 60)
-top_artists = top_artists.nlargest(top_n)
-top_tracks_grouped = totaldata.groupby(totaldata['master_metadata_album_artist_name'] + " - " + 
-                                       totaldata['master_metadata_track_name'])['ms_played'].sum() / (1000 * 60 * 60)
-top_tracks_grouped = top_tracks_grouped.nlargest(top_n)
+top_artists = totaldata['master_metadata_album_artist_name'].value_counts().head(top_n)
+top_tracks = (totaldata['master_metadata_album_artist_name'] + " - " + 
+              totaldata['master_metadata_track_name']).value_counts().head(top_n)
 
 fig_stats, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
 # Top artists bar chart
 artist_colors = [get_color(artist) for artist in top_artists.index]
 top_artists.plot(kind='barh', ax=ax1, color=artist_colors)
-ax1.set_xlabel('Total Playtime (hours)')
+ax1.set_xlabel('Total Playcount')
 ax1.set_ylabel('')
-ax1.set_title(f'Top {top_n} Artists by Playtime')
+ax1.set_title(f'Top {top_n} Artists by Playcount')
 ax1.invert_yaxis()
 
 # Top tracks bar chart
-track_colors = [get_color(track.split(" - ")[0]) for track in top_tracks_grouped.index]
-top_tracks_grouped.plot(kind='barh', ax=ax2, color=track_colors)
-ax2.set_xlabel('Total Playtime (hours)')
+track_colors = [get_color(track.split(" - ")[0]) for track in top_tracks.index]
+top_tracks.plot(kind='barh', ax=ax2, color=track_colors)
+ax2.set_xlabel('Total Playcount')
 ax2.set_ylabel('')
-ax2.set_title(f'Top {top_n} Tracks by Playtime')
+ax2.set_title(f'Top {top_n} Tracks by Playcount')
 ax2.invert_yaxis()
 
 # Wrap long track names

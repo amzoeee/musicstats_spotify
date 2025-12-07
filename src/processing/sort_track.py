@@ -4,7 +4,7 @@ import os
 def everything(): 
     jsons = []
     # assign directory
-    directory = 'rawdata'
+    directory = 'data'
     
     # iterate over files in
     # that directory
@@ -46,6 +46,6 @@ def everything():
 
     totaldata = totaldata.sort_values("ms_played", ascending=False)
 
-    totaldata.to_csv('data/tracks.csv')
+    totaldata.to_csv('output/csv/tracks.csv')
 
-everything()
+# everything()

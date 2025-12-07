@@ -9,15 +9,14 @@ labels = True # whether or not the labels are shown w track name
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
 
-totaldata = pd.read_csv("data/tracks.csv")
+totaldata = pd.read_csv("output/csv/artists.csv") 
 
 totaldata = totaldata.sort_values("times_played", ascending=False)
 
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
-ax.set_title(f'Top {str(n)} Tracks by Playcount')
-
+ax.set_title(f'Top {str(n)} Artists by Playcount')
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""
@@ -29,13 +28,13 @@ def get_color(artist):
 
 x = np.arange(0, n)
 y = partial['times_played'].tolist()
-names = [track['artist_name'] + " - " + track['track_name'] + '\nplayed ' + str(track['times_played']) + ' times' for n, track in partial.iterrows()]
+names = [artist['artist_name'] + '\nplayed ' + str(artist['times_played']) + ' times' for n, artist in partial.iterrows()]
 artist_names = partial['artist_name'].tolist()
 colors = [get_color(artist) for artist in artist_names]
 
 sc = ax.scatter(x, y, c=colors)
 
-ax.set_ylabel('playcount')
+ax.set_ylabel('Artist Playcount')
 # 10 nicely spaced y-ticks with appropriate magnitude
 y_min, y_max = min(y), max(y)
 y_range = y_max - y_min
@@ -46,7 +45,6 @@ y_max_rounded = np.ceil(y_max / magnitude) * magnitude
 yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
 ax.set_yticks(ticks=yticks)
 ax.set_xticks(ticks=[])
-
 
 if labels: 
 

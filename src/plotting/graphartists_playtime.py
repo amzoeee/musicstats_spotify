@@ -12,7 +12,7 @@ def convert_ms(ms): # function to convert ms to hr, min, and sec
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
 
-totaldata = pd.read_csv("data/artists.csv")
+totaldata = pd.read_csv("output/csv/artists.csv")
 
 partial = totaldata.iloc[:n]
 

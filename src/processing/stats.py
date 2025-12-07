@@ -1,7 +1,7 @@
 import pandas as pd
 
 try:
-    totaldata = pd.read_csv('data/tracks.csv')
+    totaldata = pd.read_csv('output/csv/tracks.csv')
 except: 
     print("make sure to run sortbytrack.py first!")
     exit()
