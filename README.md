@@ -1,44 +1,50 @@
-# musicstats_spotify
+# Music Stats for Spotify
 
-0. download extended streaming history from spotify 
-1. put data in rawdata folder
-2. run runme.py
-3. run other files 
+A Python toolkit to analyze and visualize your Extended Streaming History from Spotify.
 
-:3
+## Setup
 
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/amzoeee/musicstats_spotify.git
+    cd musicstats_spotify
+    ```
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-# programs 
-runme.py: runs sortbytrack.py, sortbyartist.py, and makenicelists.py
+## Usage
 
-sortbytrack.py: makes tracks.csv based off of raw data; includes playcount, playtime
+1.  **Request Data**: Download your "Extended Streaming History" from Spotify Privacy Settings.
+2.  **Add Data**: Place the JSON files (e.g., `Streaming_History_Audio_2023-2024.json`) into the `data/` directory.
+3.  **Run Processing**:
+    ```bash
+    python main.py
+    ```
+    This will process your history and generate summary files in `output/txt/` and CSVs in `output/csv/`.
 
-sortbyartist.py: makes artists.csv based off of tracks.csv; includes playcount, playtime, and unique tracks
+4.  **Visualize**: Run any of the plotting scripts in `src/plotting/` to see graphs.
 
+## Output Structure
 
-graphartists_playtime.py: graph top n artists by playtime (reads from artists.csv)
+-   `data/`: Place your raw Spotify input files here.
+-   `output/`:
+    -   `csv/`: Processed data files (`tracks.csv`, `artists.csv`).
+    -   `txt/`: Human-readable summaries.
 
-graphartists_playcount.py: graph top n artists by playcount (reads from artists.csv)
+## Scripts
 
-graphartists_uniquetracks.py: graph top n artists by uniquetracks (reads from artists.csv)
+### Processing
+-   `main.py`: The main entry point. Orchestrates sorting and cleaning.
+-   `src/processing/sort_track.py`: Aggregates data by track.
+-   `src/processing/sort_artist.py`: Aggregates data by artist.
+-   `src/processing/clean.py`: Generates human-readable text reports.
 
-graphartists_compare.py: graphs top n tracks by playtime, comparing playcount to unique tracks (reads from tracks.csv)
+### Visualization (`src/plotting/`)
+-   `all_plays.py`: Scatter plot of all listening history over time.
+-   `graphtopn_playcount.py` / `graphtopn_playtime.py`: Bar charts of top artists and tracks.
+-   `graphartists_*.py`: Various charts for artist statistics (playtime, playcount, unique tracks).
+-   `graphtracks_*.py`: Various charts for track statistics.
 
-
-graphtracks_playtime.py: graph top n tracks by playtime (reads from tracks.csv)
-
-graphtracks_playcount.py: graphs top n tracks by playcount (reads from tracks.csv)
-
-graphtracks_compare.py: graphs top n tracks by playtime, comparing playcount to playtime (reads from tracks.csv)
-
-
-makenicelists.py: self explanatory. (reads from tracks.csv, artists.csv)
-
-totaltimeplayed.py: self explanatory (reads from tracks.csv)
-
-graphALLtracks.py: scatterfm style graphing. hella slow :>
-
-graphtopn_playcount.py: bar graphs of your top n artists and tracks by playcount!!
-
-graphtopn_playtime.py: bar graphs of your top n artists and tracks by playtime!!
 
