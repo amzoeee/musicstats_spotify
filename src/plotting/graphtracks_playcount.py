@@ -9,15 +9,14 @@ labels = True # whether or not the labels are shown w track name
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
 
-totaldata = pd.read_csv("data/artists.csv")
+totaldata = pd.read_csv("output/csv/tracks.csv")
 
-totaldata = totaldata.sort_values("unique_tracks", ascending=False)
+totaldata = totaldata.sort_values("times_played", ascending=False)
 
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
-
-ax.set_title(f'Top {str(n)} Artists by Unique Tracks')
+ax.set_title(f'Top {str(n)} Tracks by Playcount')
 
 
 def get_color(artist):
@@ -29,12 +28,14 @@ def get_color(artist):
     return hsv_to_rgb(hue, saturation, value)
 
 x = np.arange(0, n)
-y = partial['unique_tracks'].tolist()
-names = [artist['artist_name'] + "\n" + str(artist['unique_tracks']) + ' tracks' for n, artist in partial.iterrows()]
+y = partial['times_played'].tolist()
+names = [track['artist_name'] + " - " + track['track_name'] + '\nplayed ' + str(track['times_played']) + ' times' for n, track in partial.iterrows()]
 artist_names = partial['artist_name'].tolist()
 colors = [get_color(artist) for artist in artist_names]
 
-ax.set_ylabel('unique tracks')
+sc = ax.scatter(x, y, c=colors)
+
+ax.set_ylabel('playcount')
 # 10 nicely spaced y-ticks with appropriate magnitude
 y_min, y_max = min(y), max(y)
 y_range = y_max - y_min
@@ -46,7 +47,6 @@ yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
 ax.set_yticks(ticks=yticks)
 ax.set_xticks(ticks=[])
 
-sc = ax.scatter(x, y, c=colors)
 
 if labels: 
 

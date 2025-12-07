@@ -1,7 +1,15 @@
-data/
-formatteddata/
-rawdata/
-
+# System
 .DS_Store
 
+# Python
 __pycache__/
+
+# Data (Keep folder, ignore contents)
+data/*
+!data/.gitkeep
+
+# Output (Keep structure, ignore contents)
+output/csv/*
+!output/csv/.gitkeep
+output/txt/*
+!output/txt/.gitkeep

@@ -18,7 +18,7 @@ plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin
 
 jsons = []
 # assign directory
-directory = 'rawdata'
+directory = 'data'
  
 # iterate over files in
 # that directory

@@ -4,18 +4,21 @@ import numpy as np
 import hashlib
 from colorsys import hsv_to_rgb
 
-n = 1000
-
-labels = True
+n = 25
+labels = True # whether or not the labels are shown w track name
 
 plt.rcParams['font.family'] = ['Heiti TC'] # choose font that includes non latin characters
 
-totaldata = pd.read_csv("data/artists.csv")
+totaldata = pd.read_csv("output/csv/artists.csv")
+
+totaldata = totaldata.sort_values("unique_tracks", ascending=False)
 
 partial = totaldata.iloc[:n]
 
 fig, ax = plt.subplots()
-ax.set_title('Artist Playcount v. Unique Tracks')
+
+ax.set_title(f'Top {str(n)} Artists by Unique Tracks')
+
 
 def get_color(artist):
     """Generate consistent color for artist based on hash"""
@@ -25,22 +28,13 @@ def get_color(artist):
     value = 0.8 + ((h // 36000) % 20) / 100.0
     return hsv_to_rgb(hue, saturation, value)
 
-x = partial['unique_tracks'].tolist()
-y = partial['times_played'].tolist()
+x = np.arange(0, n)
+y = partial['unique_tracks'].tolist()
+names = [artist['artist_name'] + "\n" + str(artist['unique_tracks']) + ' tracks' for n, artist in partial.iterrows()]
 artist_names = partial['artist_name'].tolist()
 colors = [get_color(artist) for artist in artist_names]
 
-ax.set_xlabel('Unique tracks')
-# 10 nicely spaced x-ticks with appropriate magnitude
-x_min, x_max = min(x), max(x)
-x_range = x_max - x_min
-magnitude = 10 ** np.floor(np.log10(x_range / 10))
-x_step = np.ceil(x_range / 10 / magnitude) * magnitude
-x_min_rounded = np.floor(x_min / magnitude) * magnitude
-x_max_rounded = np.ceil(x_max / magnitude) * magnitude
-xticks = np.arange(x_min_rounded, x_max_rounded + x_step, x_step)
-ax.set_xticks(ticks=xticks)
-ax.set_ylabel('Playcount')
+ax.set_ylabel('unique tracks')
 # 10 nicely spaced y-ticks with appropriate magnitude
 y_min, y_max = min(y), max(y)
 y_range = y_max - y_min
@@ -50,10 +44,12 @@ y_min_rounded = np.floor(y_min / magnitude) * magnitude
 y_max_rounded = np.ceil(y_max / magnitude) * magnitude
 yticks = np.arange(y_min_rounded, y_max_rounded + y_step, y_step)
 ax.set_yticks(ticks=yticks)
+ax.set_xticks(ticks=[])
 
 sc = ax.scatter(x, y, c=colors)
 
-if labels:
+if labels: 
+
     annot = ax.annotate("", xy=(0,0), xytext=(10,10),textcoords="offset points",
                         bbox=dict(boxstyle="round", fc="w"),
                         arrowprops=dict(arrowstyle="->"))
@@ -64,7 +60,7 @@ def update_annot(ind):
 
     pos = sc.get_offsets()[ind["ind"][0]]
     annot.xy = pos
-    text = "{}\nunique tracks: {}\nplaycount: {}".format(artist_names[n], x[n], y[n])
+    text = names[n]
     annot.set_text(text)
     annot.get_bbox_patch().set_alpha(0.4)
 
@@ -81,7 +77,6 @@ def hover(event):
             if vis:
                 annot.set_visible(False)
                 fig.canvas.draw_idle()
-
 if labels:
     fig.canvas.mpl_connect("motion_notify_event", hover)
 
