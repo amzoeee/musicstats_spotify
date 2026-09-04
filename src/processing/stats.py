@@ -6,6 +6,7 @@ except:
     print("make sure to run sortbytrack.py first!")
     exit()
 
+print("total time played: ")
 sum = totaldata["ms_played"].sum()
 years = sum//1000//3600//24//365
 months = (sum//1000//3600//24%365)//30
